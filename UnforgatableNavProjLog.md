@@ -38,7 +38,7 @@
 
 # 收集物体（学习物体位置阶段）
 ## GameEvents & Listener & Trigger
-<font size=4>设置一个Action`public event Action<int> OnFindTheObject;`，可以被subscribe。通过Trigger`GameEvents.current.FindTheObject(id);`可以调用其中的对应Action，然后Action会检查所有订阅了该Action的Listener。  <font>
+<font size=4>设置一个Action`public event Action<int> OnFindTheObject;`，可以被subscribe。通过触发`GameEvents.current.FindTheObject(id);`可以调用其中的对应Action，然后Action会检查所有订阅了该Action的Listener。  <font>
     
 ```c#
     if (OnFindTheObject != null)
@@ -68,7 +68,7 @@
     <font>  
 
 ### TrialManager.cs控制Trial
-<font size=4>在TrialManager.cs中，方法`GuidancePause()`停止游戏进程，呈现每个Trial的指导语，`TrialStart()`撤掉指导语，开始下一个试次。在`LearningPhase()`的每次循环开始时调用`GuidancePause()`，按空格激活Button，Button调用`TrialStart()`，实现每个试次前呈现指导语。  
+<font size=4>在TrialManager.cs中，方法`GuidancePause()`修改布尔值`isPaused = true`，以停止键盘输入，呈现每个Trial的指导语，`TrialStart()`撤掉指导语，开始下一个试次。在`LearningPhase()`的每次循环开始时调用`GuidancePause()`，按空格激活Button，Button调用`TrialStart()`，实现每个试次前呈现指导语。  
     note：Continue Button调用`TrialStart()`的实现方法与前文收集被试信息的Start Button实现方法一致，如图：<img src="https://raw.githubusercontent.com/PsyLinkist/LearningBlogPics/master/20230330162844.png" width=350/>
     <font>  
 # 实验预设  
