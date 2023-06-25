@@ -24,8 +24,9 @@ If you program's directory looks like this: `../src/helloworld/main.go`, you nee
 - change %GOPATH%.
 - create `src`, `pkg`, `bin` in the `GOPATH`.
 - download modules into bin
-- execute `go init mod <module-name>` in root dir, which generates a `go.mod` file controling project's name and dependencies.
-result:![helloworld](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202306211825311.png)
+- execute `go init mod <module-name>` in root dir(`../project-name`), which generates a `go.mod` file controling project's name and dependencies.
+result:![result](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202306251117026.png)  
+Next, use the `go mod tidy` command to scan the current directory and its subdirectories for .go files and includes them in the module. It also manages the module's dependencies based on the imported packages in your code.
 
 ### Remaining questions
 - what does these modules do:  
