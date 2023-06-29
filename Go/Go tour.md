@@ -149,7 +149,7 @@ func main() {
 //output
 //Done! It took %v seconds!
 ```
-Q：程序为什么能够在`checkAPI`没有完成的情况下结束？
+Q：程序为什么能够在`checkAPI`没有完成的情况下结束？  
 A：使用`go`关键字产生并发的goroutine来执行`checkAPI`函数，这些goroutine不会阻塞主线程的执行。而主线程结束后，未完成的goroutine也会随之终止。
 
 ## Channel
