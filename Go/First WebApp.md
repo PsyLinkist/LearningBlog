@@ -126,7 +126,75 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 ```
 In this case, the returned func is **the closure** because the fn of variable of `makeHandler()` is defined outside but enclosed in the returned func.
 
-###
-
 ## Safety
+### ListenAndServe()
 - `log.Fatal(http.ListenAndServe())`. `log.Fatal()` should be called during connecting. In case anything bad happens, exits the program without causing too many troubles.
+
+### [Relative path & Absolute path](https://stackoverflow.com/a/24028813)
+- Relative path
+
+   A relative path is always relative to the root of the document, so if your html is at the same level of the directory, you'd need to start the path directly with your picture's directory name:
+
+   `"pictures/picture.png"`
+   But there are other perks with relative paths:
+
+- dot-slash (`./`)
+
+   Dot (`.`) points to the same directory and the slash (`/`) gives access to it:
+
+   So this:
+
+   `"pictures/picture.png"`
+   Would be the same as this:
+
+   `"./pictures/picture.png"`
+- Double-dot-slash (`../`)
+
+   In this case, a double dot (`..`) points to the upper directory and likewise, the slash (`/`) gives you access to it. So if you wanted to access a picture that is on a directory one level above of the current directory your document is, your URL would look like this:
+
+   `"../picture.png"`
+   You can play around with them as much as you want, a little example would be this:
+
+   Let's say you're on directory A, and you want to access directory X.
+
+   ```
+   - root
+   |- a
+      |- A
+   |- b
+   |- x
+      |- X
+	```
+   Your URL would look either:
+      - Absolute path
+
+         `"/x/X/picture.png"`
+      Or:
+
+      - Relative path
+
+         `"./../x/X/picture.png"`
+
+## Spruce up the page
+### Using a separate CSS file to reuse CSS style
+- Request the CSS file from the server:
+   1. Get a file server handler by `http.FileServer()`. The handler handles incoming HTTP request for static files including CSS, and sends the corresponding file content back as the response.
+   2. Handle the handler by `http.Handle()`.
+   3. Example:
+   Here is the file structure in the server. We want to get the `css/styles.css` file and use it across HTML files:
+   ![file structure in server](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202306301615262.png)
+   This is how we get and use it:
+   ```go
+   fs := http.FileServer(http.Dir("./css"))
+   // Get the file server handler,
+   // `http.Dir("./css")` specifies the files served come from the "./css" directory.
+   http.Handle("/css/", http.StripPrefix("/css", fs))
+   // Handle the matching HTTP request.
+   // For example, URL == "/css/styles.css" matches the "/css/" pattern 
+   // which invokes the function. Then it removes the "/css" from the URL 
+   // before passing it to the file server handler fs. 
+   // Fanally fs will serve the styles.css file located in the `./css` directory.
+   ```
+   Result:
+   The `./css/styles.css` was sucessfully loaded:
+   ![result](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202306301651500.png)
