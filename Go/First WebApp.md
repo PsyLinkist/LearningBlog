@@ -130,6 +130,8 @@ In this case, the returned func is **the closure** because the fn of variable of
 ### ListenAndServe()
 - `log.Fatal(http.ListenAndServe())`. `log.Fatal()` should be called during connecting. In case anything bad happens, exits the program without causing too many troubles.
 
+### Input Validation
+
 ### [Relative path & Absolute path](https://stackoverflow.com/a/24028813)
 - Relative path
 
