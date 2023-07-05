@@ -8,9 +8,64 @@ go env -w GO111MODULE=on
 // on的时候，go会使用go.mod来控制项目版本和依赖。
 go env -w GOPROXY=https://proxy.golang.com.cn,direct
 ```
-
 ### Workspace
-go需要在workspace中工作，默认的workspace为%GOPATH%，可以指定多个。  
+在某个版本前，Go项目源码需要放在`%GOPATH%/src`下才能工作，这就导致很多初学者教程都以这个方式开始，使得项目结构的设置比较麻烦。但现在的版本（`go 1.20`）能够通过`go mod`和`go work`非常便捷地管理工作空间和项目文件。  
+现在假设我们的所有项目都放在路径"`d:\Projects`"下。  
+打开cmd，`cd`进入"`d:\Projects`"，运行`code .`，以当前目录作为工作空间打开VSCODE（默认已经下载好VSCODE）。
+
+#### hello world
+创建你的第一个项目"helloworld"。
+1. 在打开的VSCODE中，从"`./Projects`"创建"`./Projects/helloworld`"作为项目文件夹。
+2. 在"`./helloworld`"项目文件夹下创建`main.go`文件。
+3. 添加内容并保存：
+   ```go
+    package main
+
+    import (
+	    "fmt"
+    )
+
+    func main() {
+	    fmt.Println("hello world")
+    }
+   ```
+4. 新建Terminal，`cd`进入`./Projects/helloworld`。
+5. 在Terminal中执行`go mod init github.com/helloworld`，生成`go.mod`文件。文件内容如下：
+    ```go
+    module github.com/helloworld
+
+    go 1.20
+    ```
+    Note：`go.mod`用于控制项目名字和依赖。"`github.com/helloworld`"并不需要真的有一个远程repo，什么名字都可以，这样写只是为了以后可能上传到远程repo更加方便。
+6. 接着在Terminal中执行`go mod tidy`，虽然现在用处不大，但在之后有多个`go.mod`文件时，善用这条命令可以快速地整理这些文件。
+7. 此时虽然可以看到一些红线报错，但不影响。直接在Terminal中执行`go run main.go`，结果如图：
+   ![helloworld](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051153031.png)
+Note：到目前为止，文件结构如图：
+![文件结构](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051155405.png)
+
+#### Multi-module
+多个项目如何管理？怎么去除报错？
+1. 在"`./Projects`"下创建另一个项目文件夹"`./Projects/AnotherProj`"。其余步骤同上，最后文件结构如图：
+![文件结构](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051202565.png)
+2. `cd`返回到想要工作的项目文件夹的上一级目录。假设这里我们想继续完成`helloworld`项目，那么`cd`返回"`./Projects`"：
+![返回](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051415731.png)
+3. 执行`go work init`，生成`go.work`文件。此时会看到红线报错消失。
+4. 如果想更进一步细化确定当前的工作项目，例如`helloworld`，那么执行`go work use ./helloworld/`。此时`go.work`文件内容如下：
+    ```go
+    go 1.20
+
+    use ./helloworld
+    ```
+   会看到除了`helloworld`项目文件外，其他项目的文件出现黄线报警：
+   ![黄线报警](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051421188.png)
+
+Note：[官方文档](https://github.com/golang/tools/blob/master/gopls/doc/workspace.md)有对workspace的详细描述。报错的主要原因是`gopls`在`go 1.18`前后采用不同的方法控制多模块的工作空间。
+<!-- ### Workspace(Before version `go 1.18`)
+Go版本1.18前后，`gopls`采用不同的方式控制多模块(`multi-module`)的工作空间。  
+这里我一开始虽然打开了`GO111MODULE`，但并没有创建`go.work`去控制`multi-module`的问题（因为一开始练习只用了一个module，还不会报错），因此以下的设置适用于"**1个项目**"、"**不使用`go.work`**"的情况。 
+
+#### Basic
+`go`需要在workspace中工作，默认的workspace为%GOPATH%，可以指定多个。  
 workspace需要包括:  
 ```
 `src`//源码
@@ -28,23 +83,27 @@ If you program's directory looks like this: `.../src/helloworld/main.go`, you ne
 Result:![result](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202306251117026.png)  
 Next, use the `go mod tidy` command to scan the current directory and its subdirectories for .go files and includes them in the module. It also manages the module's dependencies based on the imported packages in your code.
 
+### Multi-module workspace controll(After version `go 1.18`)
+在这个版本之后不强制要求项目放在`%GOPATH%/src`下。使用`go mod init <module-dir>`创建`go.mod`，控制项目。
 #### Error loading workspace: gopls...
 [Official doc](https://github.com/golang/tools/blob/master/gopls/doc/workspace.md) describes the reason why this _Error_ is occurred.
 Solution could be quite simple (VSCODE):
-1. `cd` into your workspace. For example, if your workspace looks like bellow, and you want to work on your Proj2. You should be in the `src`:
+1. `cd` into your workspace. For example, if your workspace looks like bellow, and you want to work on your `Proj2`. You should be in the `src`:
    ```
    | src
      | Proj1
      | Proj2
      | Proj3
    ```
-2. run command:
+2. Run command:
    ```
    go work init
    go work use ./Proj2/
    ```
-- Tip: Ensure your workspace in VSCODE is started from `src/`. For an instance:
-![](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051020612.png)
+3. The command you run would generate a `go.work` file which contains the module you want to work on. In this case, it would be `Proj2`.
+
+- Note: Ensure your workspace in VSCODE is started from `src/`. For an instance:
+![](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051020612.png) -->
 
 ### Remaining questions
 - what does these modules do:  
