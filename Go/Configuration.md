@@ -39,15 +39,15 @@ go env -w GOPROXY=https://proxy.golang.com.cn,direct
     Note：`go.mod`用于控制项目名字和依赖。"`github.com/helloworld`"并不需要真的有一个远程repo，什么名字都可以，这样写只是为了以后可能上传到远程repo更加方便。
 6. 接着在Terminal中执行`go mod tidy`，虽然现在用处不大，但在之后有多个`go.mod`文件时，善用这条命令可以快速地整理这些文件。
 7. 此时虽然可以看到一些红线报错，但不影响。直接在Terminal中执行`go run main.go`，结果如图：
-   ![helloworld](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051153031.png)
-Note：到目前为止，文件结构如图：
+   ![helloworld](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051153031.png)  
+Note：到目前为止，文件结构如图：  
 ![文件结构](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051155405.png)
 
 #### Multi-module
 多个项目如何管理？怎么去除报错？
-1. 在"`./Projects`"下创建另一个项目文件夹"`./Projects/AnotherProj`"。其余步骤同上，最后文件结构如图：
+1. 在"`./Projects`"下创建另一个项目文件夹"`./Projects/AnotherProj`"。其余步骤同上，最后文件结构如图：  
 ![文件结构](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051202565.png)
-2. `cd`返回到想要工作的项目文件夹的上一级目录。假设这里我们想继续完成`helloworld`项目，那么`cd`返回"`./Projects`"：
+2. `cd`返回到想要工作的项目文件夹的上一级目录。假设这里我们想继续完成`helloworld`项目，那么`cd`返回"`./Projects`"：  
 ![返回](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051415731.png)
 3. 执行`go work init`，生成`go.work`文件。此时会看到红线报错消失。
 4. 如果想更进一步细化确定当前的工作项目，例如`helloworld`，那么执行`go work use ./helloworld/`。此时`go.work`文件内容如下：
@@ -57,7 +57,7 @@ Note：到目前为止，文件结构如图：
     use ./helloworld
     ```
    会看到除了`helloworld`项目文件外，其他项目的文件出现黄线报警：
-   ![黄线报警](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051421188.png)
+   ![黄线报警](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051421188.png)  
 
 Note：[官方文档](https://github.com/golang/tools/blob/master/gopls/doc/workspace.md)有对workspace的详细描述。报错的主要原因是`gopls`在`go 1.18`前后采用不同的方法控制多模块的工作空间。
 <!-- ### Workspace(Before version `go 1.18`)
