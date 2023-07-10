@@ -6,6 +6,7 @@ go install github.com/gogf/gf/cmd/gf/v2
 Ensure your Path in Environment Variable has `%GOPATH%/src/bin`;
 Reboot PC;
 
+---
 ## RESTful
 Implementing variety of handlers for variety of methods(`"GET|POST|..."`).
 
@@ -18,6 +19,7 @@ Starts listening in a blocking way, which can keep accept Requests until shut do
 `Start()` starts listening without blocking, therefore, the program would exit straighly if we don't call `g.Wait()` to manually block the server process.
 - Suitable for multi-server situation.
 
+---
 ## Router
 ### 路由注册
 指设置可以被匹配的地址，以支持对应的访问。例如：
@@ -181,7 +183,6 @@ func main() {
 
 #### 规范路由  
 自定义`Response`和`Request`的结构体，定义空结构体作为对象。为空结构体定义方法，在方法中以`context.Context`传递数据，传入`Request`，生成`Response`。  
-- 实际上是对象注册的方式  
 例：
 ```go
 package main
@@ -225,6 +226,7 @@ func main() {
     s.Run()
 }
 ```
+- Note: 实际上是对象注册的方式。
 ### Fuzzy matching routing rules
 深度优先，路由越详细，优先级越高。
 - `:`命名匹配
@@ -309,3 +311,31 @@ Note: 字段匹配 > 命名匹配 > 模糊匹配
     ```
    常用于错误处理的情况，在服务函数执行返回错误后利用后置中间件进行错误处理。
 
+---
+## OpenAPIv3
+[Official Doc](https://goframe.org/pages/viewpage.action?pageId=47703679)
+It provides a standardized format for building and documenting RESTful APIs.  
+`GoFrame`will automatically generate it. And `GoFrame` mostly uses it in **Format Routers**.
+For example, defining `*Request` and `*Response`:  
+```go
+type HelloReq struct {
+	g.Meta `path:"/hello" method:"get"`
+	Name   string `v:"required" dc:"Itadori Yuuji"`
+}
+type HelloRes struct {
+	Reply string `dc:"love you."`
+}
+```
+
+---
+## Request Input
+依靠`ghttp.Request`获取输入的信息，并生成`ghttp.Response`。  
+`GoFrame`以提交类型的方式决定参数的获取：
+1. Router
+2. Query
+3. Form
+4. Body
+5. Custom
+- 参数重名时，优先级从5到1.
+
+### 复杂参数
