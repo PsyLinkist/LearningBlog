@@ -8,6 +8,8 @@ go env -w GO111MODULE=on
 // on的时候，go会使用go.mod来控制项目版本和依赖。
 go env -w GOPROXY=https://proxy.golang.com.cn,direct
 ```
+
+---
 ### Workspace
 在某个版本前，Go项目源码需要放在`%GOPATH%/src`下才能工作，这就导致很多初学者教程都以这个方式开始，使得项目结构的设置比较麻烦。但现在的版本（`go 1.20`）能够通过`go mod`和`go work`非常便捷地管理工作空间和项目文件。  
 现在假设我们的所有项目都放在路径"`d:\Projects`"下。  
@@ -105,6 +107,7 @@ Solution could be quite simple (VSCODE):
 - Note: Ensure your workspace in VSCODE is started from `src/`. For an instance:
 ![](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051020612.png) -->
 
+---
 ### Remaining questions
 - what does these modules do:  
 ![modules](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202306211820966.png)
