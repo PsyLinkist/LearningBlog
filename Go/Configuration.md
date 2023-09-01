@@ -1,5 +1,6 @@
 # Configuration
 ## Vscode+Go
+配置VScode + Go，第一个项目“hello world”。
 
 ### Modules
 vscode安装go插件后，还需要安装一些module，由于**墙**，没法直接使用vscode安装提示需要的7个module，因此需要在terminal中使用以下代码修改代理：  
@@ -11,7 +12,7 @@ go env -w GOPROXY=https://proxy.golang.com.cn,direct
 
 ---
 ### Workspace
-在某个版本前，Go项目源码需要放在`%GOPATH%/src`下才能工作，这就导致很多初学者教程都以这个方式开始，使得项目结构的设置比较麻烦。但现在的版本（`go 1.20`）能够通过`go mod`和`go work`非常便捷地管理工作空间和项目文件。  
+在1.11版本前，Go项目源码需要放在`%GOPATH%/src`下才能工作，这就导致很多初学者教程都以这个方式开始，使得项目结构的设置比较麻烦。但现在的版本（`go 1.20`）能够通过`go mod`和`go work`非常便捷地管理工作空间和项目文件。  
 现在假设我们的所有项目都放在路径"`d:\Projects`"下。  
 打开cmd，`cd`进入"`d:\Projects`"，运行`code .`，以当前目录作为工作空间打开VSCODE（默认已经下载好VSCODE）。
 
@@ -61,7 +62,7 @@ Note：到目前为止，文件结构如图：
    会看到除了`helloworld`项目文件外，其他项目的文件出现黄线报警：
    ![黄线报警](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307051421188.png)  
 
-Note：[官方文档](https://github.com/golang/tools/blob/master/gopls/doc/workspace.md)有对workspace的详细描述。报错的主要原因是`gopls`在`go 1.18`前后采用不同的方法控制多模块的工作空间。
+Note：[官方文档](https://github.com/golang/tools/blob/master/gopls/doc/workspace.md)有对workspace的详细描述。报错的主要原因是`gopls`在`go 1.18`前后采用不同的方法管理多模块的工作空间。
 <!-- ### Workspace(Before version `go 1.18`)
 Go版本1.18前后，`gopls`采用不同的方式控制多模块(`multi-module`)的工作空间。  
 这里我一开始虽然打开了`GO111MODULE`，但并没有创建`go.work`去控制`multi-module`的问题（因为一开始练习只用了一个module，还不会报错），因此以下的设置适用于"**1个项目**"、"**不使用`go.work`**"的情况。 
@@ -112,5 +113,4 @@ Solution could be quite simple (VSCODE):
 - what does these modules do:  
 ![modules](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202306211820966.png)
 - what would happen if `GO111MODULE = off` ?
-- how to set multiple directories as `GOPATH`?
 - in what way that the `%GOPATH%` works?
