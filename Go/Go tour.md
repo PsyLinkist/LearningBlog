@@ -105,6 +105,10 @@ func main() {
 // Mark Collins is from United Kingdom
 ```
 
+### interface{} & any
+二者同等，都表示空接口，可用于任何变量的定义，传入参数也会更加方便。  
+推荐使用`any`，因为比较简洁。
+
 ## goroutine
 ### How does it work?
 ```go
@@ -224,3 +228,19 @@ GojoSatoru := Gojo {
 
 fmt.Println(GojoSatoru.Name) // output: "Gojo Satoru"
 ```
+
+## Garbage Collection
+Refferences:  
+![panphlets](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics@main/Materials/LearningBlogPics202308091805027.png) 
+
+Tools:  
+Which can be useful in checking memory usage and running speed and modify garbage collection etc.
+- pprof
+- gctrace=1
+- sync.Pool
+
+## go version control
+[manage-install](https://go.dev/doc/manage-install)
+Occasionally `go` will automatically(**suspend**) change its `env` settings which leads to issues that affect its proper functioning.  
+### no tool error
+- Check `go env -> GOTOOLDIR` and compare with your `golang downloading dir-pkg-tool`.
