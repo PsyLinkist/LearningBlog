@@ -78,7 +78,7 @@ Reboot PC;
             // user *entity.User
             err := dao.User.Ctx(ctx).Where(g.Map{
                 dao.User.Columns().Passport: passport,
-                dao.User.Columns().Password: passwora,
+                dao.User.Columns().Password: password,
             }).Scan(&user) // Scan将查询到的数据转为user结构体
             ```
         - `do`用于业务模型与实例模型转换，常用作`Where()`与`Data()`的参数。例：
@@ -358,6 +358,9 @@ Note: 字段匹配 > 命名匹配 > 模糊匹配
     ```
 - 错误处理
 - 日志处理
+
+- 特性
+   - 规范化路由能主动处理以嵌套`json`形式传过来的结构体数组。
 
 #### 中间件的使用
 ##### 分组路由中间件与全局中间件
@@ -782,7 +785,40 @@ We have tool configuration in the `.../hack` file, in which we set the generatio
 - Q：数据库中的数据类型与entity生成的结构体内部数据类型不一致怎么处理？例如数据库中为`binary(2)`，而结构体则为`string`。`Scan`函数会自动转化吗？ 
     A：就是简单的用`.Type()`比较，相同则赋值。问题都提错了，生成的`dao`中的结构体是表`column`的名字，所以是`string`类型，真正的对应表中数据的结构体在生成的`model`中，使用`do`进行数据操作，`entity`则是表的结构的映射，将会用做`pointer`进行`Scan`。 
 ### DAO
+- Q：`gdb.DB()`干什么使的？
+    A：`gdb.DB()`定义了许多与数据库ORM相关的结构及功能接口。例如`model, schema, 由原始sql语句生成的model`等。
 - Q：DAO的操作方法 
 
-    `gf gen dao`以及生成了`model`，通过`dao`直接调用就行；
+    A：`gf gen dao`已经生成了`model`，通过`dao`直接调用就行；
     利用`Scan`方法，基于`gf gen dao`生成的`entity`中表的结构体映射，将`dao`查询到的数据转化为对应初始化结构体并使用。
+
+- Q：为什么使用`gdb.model`查询到的数据库数据类型从`binary(2)`转成了`uint8`？`sql`查询出来的`binary`应该会转成`byte[]`的。
+    A：实际上就是`[]byte`，因为使用`reflect.Typeof()`打印`[]byte`的类型时，获得的结果就是`uint8`。这是因为`[]byte`是字节切片，切片中的每个元素都是`uint8`类型。
+
+- Q：能否模仿关系型数据库构建时序型数据库的DAO
+``` 
+|关系型数据库
+    |dao的内容：
+        创建model
+        返回model的基本信息
+    |dao的使用：
+        初始化model
+        使用model
+```
+A：可以自己构建一个driver，但怪麻烦的。
+
+- Q: 似乎sql驱动可以直接从传入的指针中提取对应的数据，然后传入到数据库中？那gf为什么不自动将数字字段生成指针字段，明明这样就可以赋空值了？
+   - [ ] A: 是可以的。那么为什么呢？
+    
+
+### logic & service
+- Q：logic与service怎么联系起来的？
+    A：将logic中实现了service里Interface的结构体作为变量传入service。也因此实现了业务到服务的抽象。
+
+### ghttp
+- Q：`ghttp`如何处理并发的问题？
+    A：`ghttp`继承自golang的`net/http`，而`net/http`能自动处理并发，也就是说，它能对每一个进来的`request`自动生成`goroutine`。这也是为什么`gf`的f`ocus-single`模板项目里`/logic`的程序基本都附带`context`参数。
+- Q: gf框架返回的json类型`http reponse`为什么其他非gf的程序`unmarshal`不出来？
+    A: 因为`gf`自己在它的`http response`上还自动包裹了一层。  
+    例如在`{"code":0,"message":"","data":{"DevIds":["ff00"]}}`中，`{"DevIds":["ff00"]}`是原型。  
+    但gf接收来自其他`non-gf`程序的`http request`时，也会自动转换形式，所以这个时候其他`non-gf`程序不需要手动包裹一层。
