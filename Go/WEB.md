@@ -1,4 +1,7 @@
-## curl for testing
+## Http request & response
+It is the server and client's responsibility to encode and decode HTTP requests and responses. And when form a http request and response, the header would define the content-type. Then the reciever would handle it accordingly.
+
+## Curl for testing
 
 ## cross-domain request
 Refers to a web browser's attempt to make an HTTP request from one domain to another domain. It is restricted by web browswes by default for safety reason.
@@ -60,4 +63,22 @@ Cookie: yummy_cookie=choco; tasty_cookie=strawberry
 由`scheme`和`domain`组成。例如`http://github.com`和`https://github.com`是两个不同`site`。
 
 TODO: https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#creating_cookies
-Cookie predixes
+Cookie prefixes
+
+## VUE3
+### CSS
+#### `#button`, `button` & `.button`
+- `#button` 适用于`id = "button"`的元素；
+- `button` 适用于`<button>`元素本身；
+- `.button` 适用于`class="button"`的元素。
+
+#### 文本过长
+- 换行：`word-break: break-word;`
+- 文本截断：`text-overflow: ellipsis;`
+
+#### SubCSS
+创建的`somecss`类可以使用`<somecss>.<subcss>`的方式继承并重写。
+
+### div和span
+- `div`用于创建一个模块，会自动换行。
+- `span`则是`inline`类型。

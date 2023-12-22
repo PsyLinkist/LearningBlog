@@ -1,3 +1,12 @@
+# Start
+## New a InfluxDB
+1. WebUI的左上角用户有`Create Orgnization`选项，选择并新建`bucket`。
+2. 在`Load Data -> API Tokens`处生成token，存储token。
+## Orgnization|Bucket
+- Orgnization：InfluxDB的组织，包含多个Bucket。
+- Bucket：InfluxDB的数据存储空间。
+
+# Manual
 ## Data Elements
 ![例](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202307181102122.png)
 ### Timestamp
@@ -16,7 +25,7 @@
 由两部分组成，`tag key`与`tag value`。并且`tag`是有索引(index)的，因此基于tag查询可以更加迅速，需要我们仔细考虑将什么字段设为`tag`。
 - tag key，列名，`string`类型。
 - tag value，对应列的值，`meta`类型，也就是说可以支持各种可变信息，比如`UUID`，`hash`等。这样的高可变性将使数据库中出现大量唯一序列，被称为`high series cardinality`，这种特性有利于数据库工作负载的内存使用率提升。
-- tag set，`"tag key1 = tag value1, tag key2 = tag value2, ...`
+- tag set，`tag key1 = tag value1, tag key2 = tag value2, ...`
 
 ### Bucket schema
 显式`schema-type`即描述`bucket`属性的`measurement`。多个`measurement`构成了`bucket schema`。
@@ -397,3 +406,11 @@ tables
 |> sort(desc: true)
 |> limit(n: n) 
 ```
+
+## 错误
+### Unable to write gathered points && database not found
+Cannot fix this.  
+Instead delete the data-store of `~/.influxdbv2` which enable me to restart.
+### Unable to insert points
+- Q: influxdb设置retention之后，无法插入过时的数据?
+   A: Points in a bucket with timestamps beyond the defined retention period (relative to now) are flagged for deletion (also known as “tombstoned”).

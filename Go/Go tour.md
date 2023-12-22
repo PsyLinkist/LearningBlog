@@ -229,6 +229,10 @@ GojoSatoru := Gojo {
 fmt.Println(GojoSatoru.Name) // output: "Gojo Satoru"
 ```
 
+## slice
+创建时与创建`array`的主要区别是有没有确定大小。  
+有`length`和`capacity`两种属性，`capacity`仅取决于对数组切片时的起始位置。
+
 ## Garbage Collection
 Refferences:  
 ![panphlets](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics@main/Materials/LearningBlogPics202308091805027.png) 

@@ -3,10 +3,11 @@
 配置VScode + Go，第一个项目“hello world”。
 
 ### Modules
-vscode安装go插件后，还需要安装一些module，由于**墙**，没法直接使用vscode安装提示需要的7个module，因此需要在terminal中使用以下代码修改代理：  
+vscode安装go插件后，还需要安装一些module，由于**墙**，没法直接使用vscode安装提示需要的7个module，因此需要在terminal中使用以下代码设置依赖管理的方法以及修改代理：  
 ```
 go env -w GO111MODULE=on
 // on的时候，go会使用go.mod来控制项目版本和依赖。
+// 如果off，那么将回退到以前使用`GOPATH`的管理方式
 go env -w GOPROXY=https://proxy.golang.com.cn,direct
 ```
 
@@ -110,7 +111,19 @@ Solution could be quite simple (VSCODE):
 
 ---
 ### Remaining questions
-- what does these modules do:  
+- what does these modules do: 
+   - [x] gotests  
+   自动生成测试用文件。 
+   例：
+   run command `gotests -all -w <testWantedFile.go>` 
+   ![例](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics@main/Materials/LearningBlogPics202309141145630.png)
+
+   - [x] gomodifytags  
+   管理结构体字段的`tag`。
+
+   - [ ] impl
+   - [ ] goplay
+   - [ ] dlv
+   - [ ] staticcheck
+   - [ ] gopls
 ![modules](https://cdn.jsdelivr.net/gh/PsyLinkist/LearningBlogPics/202306211820966.png)
-- what would happen if `GO111MODULE = off` ?
-- in what way that the `%GOPATH%` works?
