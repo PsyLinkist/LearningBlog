@@ -27,3 +27,15 @@ Add a new remote repository:
 
 ## 登出
 `git credential-cache exit`
+
+## gitignore
+### Format
+```gitignore
+# .gitignore
+# file
+ignoredfile.txt 
+# anyfile with a ".log" ending
+*.log 
+# directory
+/ignoreddir/ 
+```
